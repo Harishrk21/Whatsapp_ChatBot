@@ -22,6 +22,7 @@ function fetchMenuAction(menuID = null, parentMenuID = null) {
         }
 
         const connection = getConnection();
+        console.log();
         connection.execute(query, params, (err, results) => {
             if (err) {
                 console.error('Error fetching menu actions:', err.message);
