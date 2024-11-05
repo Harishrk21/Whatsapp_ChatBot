@@ -1,8 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const logger = require('./logger');
 const {sendWhatsAppMessage, sendInteractiveMessage, sendRadioButtonMessage, validateEmail} = require('./utils');
 const { connectDB,getConnection } = require('./db');
-const { fetchMenuAction, fetchEmergencyReasons, getMenuNameFromParentMenuName, insertAppointmentAndUser, fetchDepartments, fetchDoctors,getAvailableDates, getAvailableTimes} = require('./dbController');
+const { fetchMenuAction,fetchMenuName, fetchEmergencyReasons,getClientName, getMenuNameFromParentMenuName, insertAppointmentAndUser, fetchDepartments, fetchDoctors,getAvailableDates, getAvailableTimes} = require('./dbController');
 
 dotenv.config();
 const app = express();
@@ -82,11 +83,19 @@ async function handleUserSelection(from, messageBody) {
 
     // Action-based handling
     if (nextAction === 'SHOW_APPOINTMENT_OPTIONS') {
-        await sendRadioButtonMessage(from, 'Select an option', [
-            { id: 'emergency', title: 'Emergency' },
-            { id: 'Tele Consultation', title: 'Tele Consultation' },
-            { id: 'Direct Consultation', title: 'Direct Consultation' }
-        ]);
+        console.log(messageBody);
+        const parentMenuID =  await getMenuIdFromInput(messageBody);
+        const appointmentMenu = await fetchMenuName(parentMenuID);
+        const appointmentOptions = appointmentMenu.map((appnt => ({
+            id: appnt,
+            title: appnt,
+        })));
+        if (appointmentMenu.length === 0) {
+            await sendWhatsAppMessage(from, 'No apointment options found. Please try again.');
+            return;
+        }
+
+        await sendRadioButtonMessage(from, 'Select an Appointment option:', appointmentOptions);
 
         userState[from].step = 1.1; // Move to next step
     } else if (nextAction === 'FETCH_EMERGENCY_REASONS') {
@@ -238,7 +247,10 @@ app.post('/webhook', async (req, res) => {
 
             switch (userState[from].step) {
                 case 0:
-                    await sendWhatsAppMessage(from, 'Welcome to MIOT Hospital😊.How can I help you today?');
+                    userState[from].Client_ID=1;
+                    userState[from].Client_Name = await getClientName(userState[from].Client_ID);
+                    console.log(userState[from].Client_Name);
+                    await sendWhatsAppMessage(from, `Welcome to ${userState[from].Client_Name}😊. How can I help you today?`);
                     const mainMenu = await fetchMenuAction(null, 0);
                     const options = mainMenu.map(menuItem => ({
                         id: menuItem.Menu_Name,

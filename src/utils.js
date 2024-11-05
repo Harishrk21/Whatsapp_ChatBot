@@ -94,7 +94,7 @@ async function sendRadioButtonMessage(to, headerText, options) {
                 text: headerText
             },
             body: {
-                text: "We’re here to help! Please choose an option below. 🌟"
+                text: "👇🏻"
             },
             action: {
                 button: 'Select',
