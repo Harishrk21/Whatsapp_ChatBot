@@ -4,7 +4,8 @@ CREATE TABLE Appointments (
     Appointment_ID INT PRIMARY KEY AUTO_INCREMENT,
     User_ID INT,
     POC_ID INT,
-    Appointment_Date DATETIME,
+    Appointment_Date DATE,
+    Appointment_Time TIME,
     User_Location VARCHAR(255),
     User_Name VARCHAR(100),
     Appointment_Type ENUM('Tele Consultation', 'Direct Consultation', 'Emergency') DEFAULT 'Direct Consultation',  -- New column to store type of appointment

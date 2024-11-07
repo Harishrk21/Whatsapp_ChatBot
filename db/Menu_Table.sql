@@ -41,5 +41,38 @@ INSERT INTO Menu (Menu_ID, Client_ID, Language, Menu_Name, Display_Order, Parent
 (28, 1, 'ENG', 'Enter Appointment ID for Reschedule', 1, 2, 'RESCHEDULE_APPOINTMENT'),
 (29, 1, 'ENG', 'Enter Appointment ID for Cancel', 1, 3, 'CANCEL_APPOINTMENT');
 
+ALTER TABLE Menu ADD COLUMN Message VARCHAR(100);
 
 
+UPDATE Menu SET Message = 'Select an appointment option' WHERE Menu_ID = 1;
+UPDATE Menu SET Message = 'Enter Your Appointment ID' WHERE Menu_ID = 2;
+UPDATE Menu SET Message = 'Enter Your Appointment ID' WHERE Menu_ID = 3;
+UPDATE Menu SET Message = 'Select Emergency reason' WHERE Menu_ID = 4;
+UPDATE Menu SET Message = 'Select a department' WHERE Menu_ID = 5;
+UPDATE Menu SET Message = 'Select a department' WHERE Menu_ID = 6;
+UPDATE Menu SET Message = 'Share Your Location' WHERE Menu_ID = 7;
+UPDATE Menu SET Message = 'Enter Your name' WHERE Menu_ID = 8;
+UPDATE Menu SET Message = 'Please Confirm Your details' WHERE Menu_ID = 9;
+UPDATE Menu SET Message = 'Waiting for your arrival' WHERE Menu_ID = 10;
+UPDATE Menu SET Message = 'Select a doctor' WHERE Menu_ID = 11;
+UPDATE Menu SET Message = 'Select a date' WHERE Menu_ID = 12;
+UPDATE Menu SET Message = 'Select a time' WHERE Menu_ID = 13;
+UPDATE Menu SET Message = 'Enter Your Name' WHERE Menu_ID = 14;
+UPDATE Menu SET Message = 'Enter Your Email' WHERE Menu_ID = 15;
+UPDATE Menu SET Message = 'Enter Your Phone Number' WHERE Menu_ID = 16;
+UPDATE Menu SET Message = 'Please Confirm Your details' WHERE Menu_ID = 17;
+UPDATE Menu SET Message = 'Waiting for your arrival' WHERE Menu_ID = 18;
+UPDATE Menu SET Message = 'Select a doctor' WHERE Menu_ID = 19;
+UPDATE Menu SET Message = 'Select a date' WHERE Menu_ID = 20;
+UPDATE Menu SET Message = 'Select a time' WHERE Menu_ID = 21;
+UPDATE Menu SET Message = 'Enter Your Name' WHERE Menu_ID = 22;
+UPDATE Menu SET Message = 'Enter Your E-Mail' WHERE Menu_ID = 23;
+UPDATE Menu SET Message = 'Enter Your Phone Number' WHERE Menu_ID = 24;
+UPDATE Menu SET Message = 'Enter Your Location' WHERE Menu_ID = 25;
+UPDATE Menu SET Message = 'Please Confirm Your details' WHERE Menu_ID = 26;
+UPDATE Menu SET Message = 'Your gmeet link is given below' WHERE Menu_ID = 27;
+UPDATE Menu SET Message = 'Your appointment has been rescheduled' WHERE Menu_ID = 28;
+UPDATE Menu SET Message = 'Your appointment has been cancelled' WHERE Menu_ID = 29;
+
+
+USE chatbot;

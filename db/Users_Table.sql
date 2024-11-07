@@ -6,3 +6,8 @@ CREATE TABLE Users (
     User_Email VARCHAR(100),
     User_Location VARCHAR(500)
 );
+
+
+ALTER TABLE Users
+MODIFY COLUMN User_ID INT NOT NULL AUTO_INCREMENT;
+
