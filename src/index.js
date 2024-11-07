@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const logger = require('./logger');
 const {sendWhatsAppMessage, sendInteractiveMessage, sendRadioButtonMessage, validateEmail} = require('./utils');
 const { connectDB,getConnection } = require('./db');
-const { fetchMenuAction,fetchMenuName, fetchEmergencyReasons,getClientName, getMenuNameFromParentMenuName, insertAppointmentAndUser, fetchDepartments, fetchDoctors,getAvailableDates, getAvailableTimes} = require('./dbController');
+const { fetchMenuAction,fetchMenuName, fetchEmergencyReasons,getClientName,getClientID, getMenuNameFromParentMenuName, insertAppointmentAndUser, fetchDepartments, fetchDoctors,getAvailableDates, getAvailableTimes} = require('./dbController');
 
 dotenv.config();
 const app = express();
@@ -226,6 +226,14 @@ app.get('/webhook', (req, res) => {
 // Webhook event handler
 app.post('/webhook', async (req, res) => {
     const body = req.body;
+    //console.log(JSON.stringify(body));
+    const displayPhoneNumber = body.entry[0].changes[0].value.metadata.display_phone_number;  
+const phoneNumberId = body.entry[0].changes[0].value.metadata.phone_number_id;  
+process.env.PHONE_NUMBER_ID = phoneNumberId;
+  
+console.log(`Display Phone Number: ${displayPhoneNumber}`);  
+console.log(`Phone Number ID: ${phoneNumberId}`);
+
 
     if (body.object) {
         const changes = body.entry && body.entry[0].changes && body.entry[0].changes[0].value.messages;
@@ -243,11 +251,11 @@ app.post('/webhook', async (req, res) => {
             console.log(`Received message: ${messageBody} from: ${from}`);
             if (messageBody && messageBody.toLowerCase() === 'hi') {
                 userState[from] = { step: 0, currentPage: 1 }; // Reset user state to start fresh
+                userState[from].Client_ID=await getClientID(displayPhoneNumber);
             }
 
             switch (userState[from].step) {
                 case 0:
-                    userState[from].Client_ID=1;
                     userState[from].Client_Name = await getClientName(userState[from].Client_ID);
                     console.log(userState[from].Client_Name);
                     await sendWhatsAppMessage(from, `Welcome to ${userState[from].Client_Name}😊. How can I help you today?`);

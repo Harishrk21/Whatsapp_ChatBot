@@ -281,5 +281,21 @@ function getClientName(clientID) {
   });
 }
 
+function getClientID(displayPhoneNumber) {
+  return new Promise((resolve, reject) => {
+      const query = 'SELECT Client_ID FROM Client WHERE Contact_Number LIKE CONCAT("+", ?)';
+      const connection = getConnection();
 
-  module.exports={fetchMenuAction,fetchEmergencyReasons,getMenuNameFromParentMenuName, getClientName, insertAppointmentAndUser, fetchDepartments, fetchDoctors, getAvailableDates, getAvailableTimes, fetchMenuName};
+      connection.execute(query, [displayPhoneNumber], (err, results) => {  
+        if (err) {  
+         console.error('error running query:', err);  
+         return;  
+        }  
+        const clientId = results[0].Client_ID;  
+        resolve(clientId);  
+      });
+  });
+}
+
+
+  module.exports={fetchMenuAction,fetchEmergencyReasons,getMenuNameFromParentMenuName, getClientName,getClientID, insertAppointmentAndUser, fetchDepartments, fetchDoctors, getAvailableDates, getAvailableTimes, fetchMenuName};
